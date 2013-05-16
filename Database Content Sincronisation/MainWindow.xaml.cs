@@ -50,7 +50,7 @@ namespace Database_Content_Sincronisation
             mytbl = AdventureWorks.Tables[0];
             mytbl2 = AdventureWorks2.Tables[0];
 
-            cmp.ContentThatNeedsToBeSync(mytbl, mytbl2);
+            //cmp.ContentThatNeedsToBeSync(mytbl, mytbl2);
 
             DataTable treitb = new DataTable();
             //treitb = mytbl.DefaultView.ToTable();
@@ -70,15 +70,25 @@ namespace Database_Content_Sincronisation
             ad.Fill(test);
 //            test.Columns[1].ReadOnly = false;
             DataTable test2 = new DataTable();
-            test2 = test.Clone();
-            test2.Rows[0][1] = "test2";
-            ad.Update(test);
-            test.AcceptChanges();
+            //test2 = test.Clone();
+            //test2.Rows[0][1] = "test2";
+            //ad.Update(test);
+            //test.AcceptChanges();
  
             //if (db1 != db22)
             //    MessageBox.Show("different");
             //else
             //    MessageBox.Show("The same");
+
+        }
+
+        private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void checkBox1_Checked(object sender, RoutedEventArgs e)
+        {
 
         }
 
