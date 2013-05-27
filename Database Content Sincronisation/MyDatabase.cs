@@ -18,6 +18,7 @@ namespace Database_Content_Sincronisation
         private SqlConnectionStringBuilder _builder;
         private SqlCommand _cmd;
         private SqlDataReader _reader;
+        private string[] _DatabaseTableNames;
 
         public MyDatabase(string database, string server, string user, string password)
         {
@@ -45,7 +46,14 @@ namespace Database_Content_Sincronisation
             tbl.Load(_reader);
             _connection.Close();
             DataRowCollection rows = tbl.Rows;
-            _Tables = new DataTable[tbl.Rows.Count];
+            tbl.Dispose();
+            _Tables = new DataTable[rows.Count];
+            _DatabaseTableNames = new string[rows.Count];
+            int i = 0;
+            foreach (DataRow r in rows)
+            {
+                _DatabaseTableNames[i++] = r.ItemArray[0].ToString();
+            }
         }
 
 
@@ -91,10 +99,18 @@ namespace Database_Content_Sincronisation
             get { return _counter; }
         }
 
+        public string[] DatabaseTableNames
+        {
+            get
+            {
+               
+                return _DatabaseTableNames;
+            }
+        }
+
         #endregion
 
-
-        public string[] GetTableNames()
+        public string[] GetLoadedTableNames()
         {
             string[] tablenames = new string[_Tables.Count()];
             int i = 0;

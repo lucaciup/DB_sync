@@ -32,11 +32,10 @@ namespace Database_Content_Sincronisation
         {
             string tbl = "HumanResources.Department";
             MyDatabase AdventureWorks = new MyDatabase("AdventureWorks", @"dan-pc\acerextensa", "sa", "sa");
-            AdventureWorks.Fill("HumanResources.Department");
+            //AdventureWorks.Fill("HumanResources.Department");
             //AdventureWorks.Fill();
-            dataGrid1.ItemsSource = new DataTable().AsDataView();
 
-            int db1 = AdventureWorks.Tables[0].GetHashCode();
+            //int db1 = AdventureWorks.Tables[0].GetHashCode();
 
             MyDatabase AdventureWorks2 = new MyDatabase("AdventureWorks2", @"dan-pc\acerextensa", "sa", "sa");
 
@@ -70,6 +69,16 @@ namespace Database_Content_Sincronisation
             ad.Fill(test);
 //            test.Columns[1].ReadOnly = false;
             DataTable test2 = new DataTable();
+            Binding b = new Binding("DatabaseTableNames");
+            b.Source = AdventureWorks;
+            listBox_AllTables.SetBinding(ListBox.ItemsSourceProperty, b);
+            listBox_AllTables.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("", System.ComponentModel.ListSortDirection.Ascending));
+            this.button_SelectItem.Click += new RoutedEventHandler(this.button_SelectItem_OnClick);
+            this.button_SelectAllItems.Click += new RoutedEventHandler(button_SelectAllItems_Click);
+            this.button_DeselectAll.Click += new RoutedEventHandler(button_DeselectAll_Click);
+            //b.ElementName = AdventureWorks2.Tables[0].TableName;
+            //var a = AdventureWorks.GetTableNames().AsEnumerable();
+            //listBox_AllTables.ItemsSource = AdventureWorks.GetTableNames().AsEnumerable();
             //test2 = test.Clone();
             //test2.Rows[0][1] = "test2";
             //ad.Update(test);
@@ -80,6 +89,33 @@ namespace Database_Content_Sincronisation
             //else
             //    MessageBox.Show("The same");
 
+            //var stackPanel = new StackPanel { Orientation = Orientation.Vertical };
+            //stackPanel.Children.Add(new Label { Content = "Source database", HorizontalAlignment = HorizontalAlignment.Left });
+            ////stackPanel.Children.Add(new Button { Content = "Button" });
+            //foreach (DataTable t in AdventureWorks2.Tables)
+            //{
+            //    stackPanel.Children.Add(new CheckBox { Name = t.TableName, Content = t.TableName });
+            //}
+            //this.Content = stackPanel;
+
+        }
+
+        void button_DeselectAll_Click(object sender, RoutedEventArgs e)
+        {
+            if (!listBox_SelectedTables.Items.IsEmpty)
+            {
+                listBox_SelectedTables.Items.Clear();
+            }
+        }
+
+        void button_SelectAllItems_Click(object sender, RoutedEventArgs e)
+        {
+            if (!listBox_AllTables.Items.IsEmpty)
+            {
+                listBox_SelectedTables.Items.Clear();
+                foreach (object o in listBox_AllTables.Items)
+                    listBox_SelectedTables.Items.Add(o);
+            }
         }
 
         private void dataGrid1_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -90,6 +126,22 @@ namespace Database_Content_Sincronisation
         private void checkBox1_Checked(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void button_DeselectItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (!listBox_SelectedTables.Items.IsEmpty)
+            {
+                listBox_SelectedTables.Items.RemoveAt(listBox_SelectedTables.Items.Count - 1);
+            }
+        }
+
+        private void button_SelectItem_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (!listBox_AllTables.Items.IsEmpty && !listBox_SelectedTables.Items.Contains(listBox_AllTables.SelectedItem))
+            {
+                listBox_SelectedTables.Items.Add(listBox_AllTables.SelectedItem);
+            }
         }
 
     }
